@@ -1,4 +1,4 @@
-param(
+﻿param(
   [Parameter(Mandatory=$true)][ValidateSet('NewChat','Voice','StopVoice','Desktop','Restore')][string]$Action,
   [string]$Executable,
   [string]$Handle = '0',
