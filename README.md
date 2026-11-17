@@ -16,6 +16,10 @@
 | --- | --- |
 | ![EMBER](docs/screenshot-ember.png) | ![MATRIX](docs/screenshot-matrix.png) |
 
+## Windows版（実装プレビュー）
+
+Windows向けの再実装を `windows/` に追加しました。[導入手順・対応範囲](windows/README.ja.md)をご覧ください。元のmacOS版とは別実装で、Windows実機での動作確認はまだ行っていません。
+
 ## インストール
 
 ### ダウンロードして使う

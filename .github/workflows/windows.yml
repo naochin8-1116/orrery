@@ -1,0 +1,49 @@
+name: Windows desktop build
+on:
+  workflow_dispatch:
+  push:
+    paths: ['windows/**', '.github/workflows/windows.yml']
+  pull_request:
+    paths: ['windows/**', '.github/workflows/windows.yml']
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: npm ci
+        working-directory: windows
+      - run: ./tools/check-powershell.ps1
+        shell: powershell
+        working-directory: windows
+      - run: npm test
+        working-directory: windows
+      - run: npx playwright install chromium
+        working-directory: windows
+      - run: npm run test:ui
+        working-directory: windows
+      - run: npm run build:native
+        working-directory: windows
+      - run: ./native/ProcessAudio/publish/Orrery.ProcessAudio.exe --self-test
+        working-directory: windows
+      - run: npm run test:desktop
+        working-directory: windows
+      - run: npm run dist
+        working-directory: windows
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Orrery-Windows-x64
+          path: |
+            windows/dist/*.exe
+            windows/dist/*.zip

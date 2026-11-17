@@ -1,0 +1,78 @@
+{
+  "name": "orrery-windows",
+  "version": "0.2.0",
+  "private": true,
+  "description": "ORRERY desktop dashboard for Windows",
+  "author": "ORRERY contributors",
+  "license": "MIT",
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test",
+    "pack": "npm run build:native && electron-builder --win --dir",
+    "dist": "npm run build:native && electron-builder --win nsis zip",
+    "test:ui": "node tools/ui-check.cjs",
+    "test:desktop": "node tools/electron-smoke.cjs",
+    "build:native": "node tools/build-native.cjs",
+    "prestart": "npm run build:native"
+  },
+  "dependencies": {
+    "systeminformation": "^5.31.0"
+  },
+  "devDependencies": {
+    "electron": "^42.0.0",
+    "electron-builder": "^26.0.12",
+    "playwright": "^1.65.1"
+  },
+  "build": {
+    "appId": "io.github.ito-ops.orrery.windows",
+    "productName": "Orrery",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json",
+      "LICENSE"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "extraResources": [
+      {
+        "from": "src/wake.ps1",
+        "to": "wake.ps1"
+      },
+      {
+        "from": "src/windows.ps1",
+        "to": "windows.ps1"
+      },
+      {
+        "from": "native/ProcessAudio/publish",
+        "to": "process-audio",
+        "filter": [
+          "**/*",
+          "!**/*.pdb"
+        ]
+      }
+    ]
+  }
+}

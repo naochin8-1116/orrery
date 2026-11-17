@@ -1,0 +1,11 @@
+const {spawnSync}=require('node:child_process');const fs=require('node:fs');const path=require('node:path');const os=require('node:os');
+const root=path.resolve(__dirname,'..'),output=path.join(root,'native/ProcessAudio/publish');
+const result=spawnSync(process.env.ORRERY_DOTNET || 'dotnet',['publish',path.join(root,'native/ProcessAudio/ProcessAudio.csproj'),'-c','Release','-o',output],{stdio:'inherit',shell:false});
+if(result.error)throw result.error;if(result.status!==0)process.exit(result.status || 1);
+const deps=JSON.parse(fs.readFileSync(path.join(output,'Orrery.ProcessAudio.deps.json'),'utf8'));
+const runtime=Object.keys(deps.libraries).find(k=>k.startsWith('runtimepack.Microsoft.NETCore.App.Runtime.win-x64/'));
+if(!runtime)throw Error('Windows runtime dependency missing');
+const packages=process.env.NUGET_PACKAGES || path.join(os.homedir(),'.nuget','packages');
+const packageDir=path.join(packages,'microsoft.netcore.app.runtime.win-x64',runtime.split('/')[1]);
+for(const file of ['LICENSE.TXT','THIRD-PARTY-NOTICES.TXT'])fs.copyFileSync(path.join(packageDir,file),path.join(output,file));
+console.log('Windows audio helper and .NET runtime license notices are ready.');
