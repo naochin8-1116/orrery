@@ -6,12 +6,16 @@
 
 対象は **Windows 11 / x64** です。
 
-1. `Orrery-Windows-0.2.0-x64.zip` を右クリック→「すべて展開」。
+[Windows版のダウンロード（GitHubログインが必要）](https://github.com/naochin8-1116/orrery/actions/runs/44121880877/artifacts/14344644709) · [ビルド成功の記録](https://github.com/naochin8-1116/orrery/actions/runs/44121880877)
+
+ダウンロードした `Orrery-Windows-x64.zip` を展開すると、`Orrery Setup 0.2.0.exe`（インストーラー）と `Orrery-0.2.0-win.zip`（展開して使う版）が入っています。手軽に導入する場合はインストーラーを開いてください。展開版の手順は次の通りです。
+
+1. `Orrery-0.2.0-win.zip` を右クリック→「すべて展開」。
 2. 展開フォルダー内の`Orrery.exe`を開きます。exeだけを別の場所へ移動せず、フォルダー全体を保管してください。
 3. 時計・PC情報が表示されます。天気・株価にはインターネット接続が必要です。
 4. 「再生音 OFF」でPCの音に、「マイク OFF」で自分の声にリングが反応します。もう一度押すと停止します。
 
-この成果物はLinux上でWindows用に組み立てたプレビューで、**Windows実機ではまだ動作確認していません**。署名・自動更新はありません。出所を確認し、組織の実行制限は管理者の方針に従ってください。
+Windows向けのプレビューです。**GitHub ActionsのWindows Server 2025上でアプリの起動・PC情報取得・設定保存を確認しました。手元のWindows 11や実際の音声デバイスとの連携は未検証です。**署名・自動更新はありません。出所を確認し、組織の実行制限は管理者の方針に従ってください。
 
 実行用ZIPにはElectronと音声取得ヘルパーの.NETランタイムを含みます。使う人がNode.jsや.NETを別途入れる必要はありません。
 
@@ -124,11 +128,11 @@ npm start
 npm run dist
 ```
 
-`dist`にx64のセットアップ.exeとZIPを生成します。GitHub ActionsにもWindows上でPowerShell構文・C#コード・Nodeテスト・画面テスト・Electronテストを実行してからビルドするワークフローを追加しています。この作業ではGitHubへpushもActions実行もしていません。
+`dist`にx64のセットアップ.exeとZIPを生成します。GitHub ActionsにもWindows上でPowerShell構文・C#コード・Nodeテスト・画面テスト・Electronテストを実行してからビルドするワークフローを追加しています。変更は [Windows版のブランチ](https://github.com/naochin8-1116/orrery/tree/feat/windows-port) と [PR #1](https://github.com/naochin8-1116/orrery/pull/1) に保存しています。Windows上の確認結果は [ビルド履歴](https://github.com/naochin8-1116/orrery/actions) で確認できます。
 
 ## 検証と残る条件
 
-Nodeの17テスト、Chromiumの模擬画面操作、Windows用ヘルパーのコンパイル、合成音波・無音でのFFTを検証しました。詳細は`VERIFICATION.md`。
+Nodeの18テスト、Chromiumの模擬画面操作、Windows用ヘルパーのコンパイル、合成音波・無音でのFFTを検証しました。詳細は`VERIFICATION.md`。
 
 **Windowsの音声デバイス、Explorerへの実際の配置、実際のCodexのUI操作、インストーラーの動作はWindows実機で未検証です。** 実装があることと実機で動作確認できたことを区別しています。Windowsや対象アプリの条件を満たせない機能は、エラー表示して停止します。
 
